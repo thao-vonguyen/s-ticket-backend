@@ -8,7 +8,7 @@ export class Event {
   @Column({ name: 'event_name', type: 'text' })
   name: string;
 
-  @Column({ name: 'organization_id', type: 'int8' })
+  @Column({ name: 'organization_id', type: 'int4' })
   organizationId: number;
 
   @Column({ name: 'created_time', type: 'timestamp' })
