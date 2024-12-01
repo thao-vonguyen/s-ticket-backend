@@ -19,4 +19,7 @@ export class Event {
 
   @Column({ name: 'event_description', type: 'text', nullable: true })
   description: string;
+
+  @Column({ name: 'image', type: 'text', nullable: true })
+  image: string;
 }
