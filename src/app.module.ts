@@ -5,6 +5,7 @@ import { AppService } from './app.service';
 import { EventModule } from './event/event.module';
 import { Event } from './event/entities/event.entity';
 import { UserModule } from './user/user.module';
+import { User } from './user/entities/user.entity';
 
 @Module({
   imports: [
@@ -14,7 +15,7 @@ import { UserModule } from './user/user.module';
       port: 5432,
       password: 'VLYmuJ5UFWURmHcx',
       username: 'postgres.vepooluprzkesyzrzzjx',
-      entities: [Event],
+      entities: [Event, User],
       database: 'postgres',
       synchronize: true,
       logging: true,

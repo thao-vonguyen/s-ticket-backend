@@ -1,4 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { EventCategory, EventStatus } from '../dto/event.dto';
 
 @Entity('event')
 export class Event {
@@ -22,4 +23,34 @@ export class Event {
 
   @Column({ name: 'image', type: 'text', nullable: true })
   image: string;
+
+  @Column({ name: 'address', type: 'text', nullable: true })
+  address: string;
+
+  @Column({ name: 'category', type: 'enum', enum: EventCategory })
+  category: EventCategory;
+
+  @Column({ name: 'organizer_name', type: 'text', nullable: true })
+  organizerName: string;
+  
+  @Column({ name: 'organizer_description', type: 'text', nullable: true })
+  organizerDescription: string;
+
+  @Column({ name: 'organizer_logo', type: 'text', nullable: true })
+  organizerImage: string;
+
+  @Column({ name: 'bank_account_name', type: 'text', nullable: true })
+  bankAccountName: string;
+
+  @Column({ name: 'bank_account_number', type: 'varchar', nullable: true })
+  bankAccountNumber: string;
+
+  @Column({ name: 'bank_name', type: 'text', nullable: true })
+  bankName: string;
+
+  @Column({ name: 'bank_branch', type: 'text', nullable: true })
+  bankBranch: string;
+
+  @Column({ name: 'status', type: 'enum', enum: EventStatus })
+  status: EventStatus;
 }

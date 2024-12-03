@@ -1,9 +1,9 @@
 import { Column, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
-import { Gender } from '../dto/user.dto';
+import { Gender, UserRole } from '../dto/user.dto';
 
 @Entity('user')
 export class User {
-  @Column({ name: 'id' })
+  @PrimaryGeneratedColumn({ name: 'id' })
   id: string;
 
   @Column({ name: 'name', type: 'varchar' })
@@ -15,10 +15,10 @@ export class User {
   @Column({ name: 'phone_number', type: 'varchar' })
   phoneNumber: string;
 
-  @Column({ name: 'email', type: 'varchar' })
+  @Column({ name: 'email', type: 'text', unique: true })
   email: string;
 
-  @Column({ name: 'gender', type: 'enum', enum: Gender })
+  @Column({ name: 'gender', type: 'enum', enum: Gender, nullable: true })
   gender: Gender;
 
   @Column({ name: 'created_time', type: 'timestamp' })
@@ -27,6 +27,6 @@ export class User {
   @UpdateDateColumn({ name: 'modified_time', type: 'timestamp' })
   modifiedTime: string;
 
-  @Column({ name: 'event_description', type: 'text', nullable: true })
-  description: string;
+  @Column({ name: 'role', type: 'enum', enum: UserRole })
+  role: UserRole;
 }
