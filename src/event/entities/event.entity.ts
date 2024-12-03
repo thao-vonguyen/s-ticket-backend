@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { EventCategory, EventStatus } from '../dto/event.dto';
 
 @Entity('event')
@@ -12,7 +12,7 @@ export class Event {
   @Column({ name: 'organization_id', type: 'int4' })
   organizationId: number;
 
-  @Column({ name: 'created_time', type: 'timestamp' })
+  @CreateDateColumn({ name: 'created_time', type: 'timestamp' })
   createdTime: string;
 
   @UpdateDateColumn({ name: 'modified_time', type: 'timestamp' })

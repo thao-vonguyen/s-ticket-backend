@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { Gender, UserRole } from '../dto/user.dto';
 
 @Entity('user')
@@ -21,7 +21,7 @@ export class User {
   @Column({ name: 'gender', type: 'enum', enum: Gender, nullable: true })
   gender: Gender;
 
-  @Column({ name: 'created_time', type: 'timestamp' })
+  @CreateDateColumn({ name: 'created_time', type: 'timestamp' })
   createdTime: string;
 
   @UpdateDateColumn({ name: 'modified_time', type: 'timestamp' })

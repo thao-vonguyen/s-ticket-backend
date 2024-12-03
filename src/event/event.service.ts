@@ -1,21 +1,32 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { EventCategory } from './dto/event.dto';
-import { Repository } from 'typeorm';
+import { EventCategory, EventStatus } from './dto/event.dto';
+import { Filter, FindManyOptions, Repository } from 'typeorm';
 import { Event } from './entities/event.entity';
+import { MiniEventService } from 'src/mini-event/mini-event.service';
 
 @Injectable()
 export class EventService {
   constructor(
     @InjectRepository(Event) private readonly eventRepository: Repository<Event>,
+    private readonly miniEventService: MiniEventService
   ) {}
-  findRecent({ offset, limit }) {
-    return this.eventRepository.find({ skip: offset, take: limit });
+  findUpcoming(filter: FindManyOptions<Event>) {
+    return this.eventRepository.find({ 
+      order: { createdTime: 'DESC' },  
+    });
   }
 
-  find(category?: EventCategory) {
-    return this.eventRepository.find({
-      where: { category }
+  async find(filter: FindManyOptions<Event>) {
+    const events = await this.eventRepository.find(filter);
+
+    const eventList = events.map(async(event) => {
+      let firstMiniEvent = await this.miniEventService.getFirstMiniEventByEventId(event.id);
+
+      return {
+        ...event,
+        date: firstMiniEvent.startTime
+      }
     });
   }
 

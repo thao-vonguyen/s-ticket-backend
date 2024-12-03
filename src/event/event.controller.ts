@@ -1,22 +1,38 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { EventService } from './event.service';
 import { EventCategory } from './dto/event.dto';
+import { Filter, FindManyOptions } from 'typeorm';
 
 @Controller('event')
 export class EventController {
   constructor(private readonly eventService: EventService) {}
 
   @Get()
-  findByCategory(@Query('category') category?: EventCategory) {
-    return this.eventService.find(category);
+  find(
+    @Query('filter') filter: string
+  ) {
+    let options: FindManyOptions;
+
+    try {
+      options = JSON.parse(filter);
+    } catch (error) {
+      throw new Error('Invalid filter format. Expected JSON string.');
+    }
+    return this.eventService.find(options);
   }
 
-  @Get('recent')
-  findRecent(
-    @Query('offset') offset: number,
-    @Query('limit') limit: number
+  @Get('upcoming')
+  findUpcoming(
+    @Query('filter') filter: string
   ) {
-    return this.eventService.findRecent({ offset, limit });
+    let options: FindManyOptions;
+
+    try {
+      options = JSON.parse(filter);
+    } catch (error) {
+      throw new Error('Invalid filter format. Expected JSON string.');
+    }
+    return this.eventService.findUpcoming(options);
   }
 
   @Get(':id')

@@ -6,6 +6,10 @@ import { EventModule } from './event/event.module';
 import { Event } from './event/entities/event.entity';
 import { UserModule } from './user/user.module';
 import { User } from './user/entities/user.entity';
+import { MiniEventModule } from './mini-event/mini-event.module';
+import { MiniEvent } from './mini-event/entities/mini-event.entity';
+import { TicketRankModule } from './ticket-rank/ticket-rank.module';
+import { TicketRank } from './ticket-rank/entities/ticket-rank.entity';
 
 @Module({
   imports: [
@@ -15,13 +19,15 @@ import { User } from './user/entities/user.entity';
       port: 5432,
       password: 'VLYmuJ5UFWURmHcx',
       username: 'postgres.vepooluprzkesyzrzzjx',
-      entities: [Event, User],
+      entities: [Event, User, MiniEvent, TicketRank],
       database: 'postgres',
       synchronize: true,
       logging: true,
     }),
     EventModule,
-    UserModule
+    UserModule,
+    MiniEventModule,
+    TicketRankModule
   ],
   controllers: [AppController],
   providers: [AppService],
