@@ -8,7 +8,7 @@ export class EventController {
   constructor(private readonly eventService: EventService) {}
 
   @Get()
-  find(
+  async find(
     @Query('filter') filter: string
   ) {
     let options: FindManyOptions;
@@ -22,21 +22,14 @@ export class EventController {
   }
 
   @Get('upcoming')
-  findUpcoming(
-    @Query('filter') filter: string
+  async findUpcoming(
+    @Query('limit') limit: number
   ) {
-    let options: FindManyOptions;
-
-    try {
-      options = JSON.parse(filter);
-    } catch (error) {
-      throw new Error('Invalid filter format. Expected JSON string.');
-    }
-    return this.eventService.findUpcoming(options);
+    return await this.eventService.findUpcoming(limit);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.eventService.findOne(+id);
+  async getEvent(@Param('id') id: string) {
+    return await this.eventService.getEventWithMiniEventsAndTicketRanks(+id);
   }
 }

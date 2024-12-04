@@ -5,10 +5,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Event } from './entities/event.entity'
 import { MiniEventService } from 'src/mini-event/mini-event.service';
 import { MiniEvent } from 'src/mini-event/entities/mini-event.entity';
+import { TicketRank } from 'src/ticket-rank/entities/ticket-rank.entity';
+import { TicketRankService } from 'src/ticket-rank/ticket-rank.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Event, MiniEvent])],
+  imports: [TypeOrmModule.forFeature([Event, MiniEvent, TicketRank])],
   controllers: [EventController],
-  providers: [EventService, MiniEventService],
+  providers: [EventService, MiniEventService, TicketRankService],
 })
 export class EventModule {}

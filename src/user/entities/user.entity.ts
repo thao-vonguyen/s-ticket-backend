@@ -22,10 +22,10 @@ export class User {
   gender: Gender;
 
   @CreateDateColumn({ name: 'created_time', type: 'timestamp' })
-  createdTime: string;
+  createdTime: Date;
 
   @UpdateDateColumn({ name: 'modified_time', type: 'timestamp' })
-  modifiedTime: string;
+  modifiedTime: Date;
 
   @Column({ name: 'role', type: 'enum', enum: UserRole })
   role: UserRole;

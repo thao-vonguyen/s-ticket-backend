@@ -1,6 +1,7 @@
+import { MiniEvent } from "src/mini-event/entities/mini-event.entity";
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
-@Entity('ticket-rank')
+@Entity('ticket_rank')
 export class TicketRank {
     @PrimaryGeneratedColumn({ name: 'id' })
     id: number;
@@ -17,14 +18,14 @@ export class TicketRank {
     @Column({ name: 'price', type: 'int4' })
     price: number;
 
-    @Column({ name: 'event_id', type: 'int4' })
-    eventId: number;
+    @Column({ name: 'mini_event_id', type: 'int4' })
+    miniEventId: number;
 
     @CreateDateColumn({ name: 'created_time', type: 'timestamp' })
-    createdTime: string;
+    createdTime: Date;
 
     @UpdateDateColumn({ name: 'modified_time', type: 'timestamp' })
-    modifiedTime: string;
+    modifiedTime: Date;
 
     @Column({ name: 'sold_number', type: 'int2' })
     soldNumber: number;

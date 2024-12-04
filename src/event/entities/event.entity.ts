@@ -1,5 +1,6 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { EventCategory, EventStatus } from '../dto/event.dto';
+import { MiniEventWithTicketRank } from 'src/mini-event/entities/mini-event.entity';
 
 @Entity('event')
 export class Event {
@@ -13,10 +14,10 @@ export class Event {
   organizationId: number;
 
   @CreateDateColumn({ name: 'created_time', type: 'timestamp' })
-  createdTime: string;
+  createdTime: Date;
 
   @UpdateDateColumn({ name: 'modified_time', type: 'timestamp' })
-  modifiedTime: string;
+  modifiedTime: Date;
 
   @Column({ name: 'event_description', type: 'text', nullable: true })
   description: string;
@@ -53,4 +54,14 @@ export class Event {
 
   @Column({ name: 'status', type: 'enum', enum: EventStatus })
   status: EventStatus;
+}
+
+export class EventWithDateAndPrice extends Event {
+  date: Date;
+  price: number;
+}
+
+export class EventWithMiniEventsAndTicketRanks extends Event {
+  price: number;
+  miniEvents: MiniEventWithTicketRank[];
 }

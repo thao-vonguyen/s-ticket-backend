@@ -1,3 +1,4 @@
+import { TicketRank } from "src/ticket-rank/entities/ticket-rank.entity";
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity('mini_event')
@@ -12,17 +13,21 @@ export class MiniEvent {
     description: string;
 
     @CreateDateColumn({ name: 'created_time', type: 'timestamp' })
-    createdTime: string;
+    createdTime: Date;
 
     @UpdateDateColumn({ name: 'modified_time', type: 'timestamp' })
-    modifiedTime: string;
+    modifiedTime: Date;
 
     @Column({ name: 'start_time', type: 'timestamp' })
-    startTime: string;
+    startTime: Date;
 
     @Column({ name: 'end_time', type: 'timestamp', nullable: true })
-    endTime: string;
+    endTime: Date;
 
     @Column({ name: 'image', type: 'text', nullable: true })
     image: string;
+}
+
+export class MiniEventWithTicketRank extends MiniEvent {
+    ticketRanks: TicketRank[]
 }
