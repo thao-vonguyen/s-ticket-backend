@@ -18,12 +18,12 @@ export class EventService {
     @InjectRepository(TicketRank) private readonly ticketRankRepository: Repository<TicketRank>,
     private readonly miniEventService: MiniEventService,
     private readonly ticketRankService: TicketRankService
-  ) {}
+  ) { }
 
   async find(filter: FindManyOptions<Event>): Promise<EventWithPrice[]> {
     const events = await this.eventRepository.find(filter);
 
-    const promises = events.map(async(event) => {
+    const promises = events.map(async (event) => {
 
       let minPrice = await this.miniEventService.findMinPriceTicketRank(event.id);
 
@@ -44,24 +44,24 @@ export class EventService {
       where: { organizationId, ...filter.where },
       ...filter,
     });
-  
+
     const promises = events.map(async (event) => {
       const miniEventsWithTicketRanks = await this.miniEventService.getMiniEventWithTicketRanks(event.id);
-  
+
       return {
         ...event, // Spread the event data
         miniEvents: miniEventsWithTicketRanks, // Include mini events
       };
     });
-  
+
     return Promise.all(promises);
   }
-  
+
   async getEventWithMiniEventsAndTicketRanks(id: number): Promise<EventWithMiniEventsAndTicketRanks> {
     const event = await this.find({ where: { id } });
 
     const miniEvents = await this.miniEventService.getMiniEventWithTicketRanks(id);
-    
+
     return { ...event[0], miniEvents: miniEvents };
   }
 
@@ -69,30 +69,30 @@ export class EventService {
     // Calculate the earliest and latest dates from miniEvents
     let startTime: Date | null = null;
     let endTime: Date | null = null;
-  
+
     if (createEventDto.miniEvents && createEventDto.miniEvents.length > 0) {
       const miniEventDates = createEventDto.miniEvents.map(me => new Date(me.startTime));
       startTime = min(miniEventDates);
       const miniEventEndDates = createEventDto.miniEvents.map(me => new Date(me.endTime));
       endTime = max(miniEventEndDates);
     }
-  
+
     // Create the main event with the calculated startTime and endTime
     const event = this.eventRepository.create({
       ...createEventDto,
       startTime,
       endTime,
     });
-  
+
     const savedEvent = await this.eventRepository.save(event);
-  
+
     // Create mini events and associate them with the saved event
     if (createEventDto.miniEvents && createEventDto.miniEvents.length > 0) {
       for (const miniEventDto of createEventDto.miniEvents) {
         await this.miniEventService.create(miniEventDto, savedEvent.id);
       }
     }
-  
+
     return savedEvent;
   }
 

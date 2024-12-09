@@ -33,7 +33,7 @@ export class Event {
 
   @Column({ name: 'organizer_name', type: 'text', nullable: true })
   organizerName: string;
-  
+
   @Column({ name: 'organizer_description', type: 'text', nullable: true })
   organizerDescription: string;
 
@@ -58,10 +58,10 @@ export class Event {
   @Column({ name: 'is_on_ad', type: 'bool' })
   isOnAd: boolean;
 
-  @Column({ name: 'start_time', type: 'timestamp', nullable: true  })
+  @Column({ name: 'start_time', type: 'timestamp', nullable: true })
   startTime: Date;
 
-  @Column({ name: 'end_time', type: 'timestamp', nullable: true  })
+  @Column({ name: 'end_time', type: 'timestamp', nullable: true })
   endTime: Date;
 }
 
