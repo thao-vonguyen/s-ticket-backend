@@ -54,6 +54,9 @@ export class Event {
 
   @Column({ name: 'status', type: 'enum', enum: EventStatus })
   status: EventStatus;
+
+  @Column({ name: 'is_on_ad', type: 'bool' })
+  isOnAd: boolean;
 }
 
 export class EventWithDateAndPrice extends Event {
@@ -61,7 +64,6 @@ export class EventWithDateAndPrice extends Event {
   price: number;
 }
 
-export class EventWithMiniEventsAndTicketRanks extends Event {
-  price: number;
+export class EventWithMiniEventsAndTicketRanks extends EventWithDateAndPrice {
   miniEvents: MiniEventWithTicketRank[];
 }
