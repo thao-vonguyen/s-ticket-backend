@@ -18,7 +18,7 @@ export class EventController {
     } catch (error) {
       throw new Error('Invalid filter format. Expected JSON string.');
     }
-    return this.eventService.find(options);
+    return await this.eventService.find(options);
   }
 
   @Get('upcoming')

@@ -64,11 +64,10 @@ export class EventService {
   }
 
   async getEventWithMiniEventsAndTicketRanks(id: number): Promise<EventWithMiniEventsAndTicketRanks> {
-    const event = await this.eventRepository.findOne({ where: { id } });
-    let minPriceTicketRank = await this.miniEventService.findMinPriceTicketRank(event.id);
+    const event = await this.find({ where: { id } });
 
-    const miniEvents = await this.miniEventService.getMiniEventWithTicketRanks(event.id);
+    const miniEvents = await this.miniEventService.getMiniEventWithTicketRanks(id);
     
-    return { ...event, price: minPriceTicketRank.price, miniEvents: miniEvents };
+    return { ...event[0], miniEvents: miniEvents };
   }
 }
