@@ -10,6 +10,9 @@ import { MiniEventModule } from './mini-event/mini-event.module';
 import { MiniEvent } from './mini-event/entities/mini-event.entity';
 import { TicketRankModule } from './ticket-rank/ticket-rank.module';
 import { TicketRank } from './ticket-rank/entities/ticket-rank.entity';
+import { TransactionModule } from './transaction/transaction.module';
+import { TicketModule } from './ticket/ticket.module';
+import { PaymentModule } from './payment/payment.module';
 
 @Module({
   imports: [
@@ -27,7 +30,10 @@ import { TicketRank } from './ticket-rank/entities/ticket-rank.entity';
     EventModule,
     UserModule,
     MiniEventModule,
-    TicketRankModule
+    TicketRankModule,
+    TransactionModule,
+    TicketModule,
+    PaymentModule
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,0 +1,6 @@
+export enum TicketStatus {
+    SUCCESSFUL = 'SUCCESSFUL',
+    IN_PROGRESS = 'IN_PROGRESS',
+    CANCELLED = 'CANCELLED',
+    PAYMENT_SUCCESS = 'PAYMENT_SUCCESS'
+} 
