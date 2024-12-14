@@ -76,7 +76,7 @@ export class MiniEventService {
       eventId, // Associate with the event
     });
     const savedMiniEvent = await this.miniEventRepository.save(miniEvent);
-    
+
     // Create ticket ranks and associate them with the mini event
     const ticketRanks = createMiniEventWithTicketRankDto.ticketRanks.map(rank => {
       return {
