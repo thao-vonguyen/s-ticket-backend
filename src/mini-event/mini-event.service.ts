@@ -10,9 +10,9 @@ export class MiniEventService {
   constructor(
     @InjectRepository(MiniEvent) private readonly miniEventRepository: Repository<MiniEvent>,
     private readonly ticketRankService: TicketRankService
-  ) {}
+  ) { }
   async getFirstMiniEventByEventId(eventId: number): Promise<MiniEvent> {
-    return await this.miniEventRepository.findOne({ 
+    return await this.miniEventRepository.findOne({
       where: { eventId },
       order: { createdTime: 'ASC' }
     });
@@ -33,16 +33,17 @@ export class MiniEventService {
 
     const ticketRankList = await Promise.all(ticketRankListPromise);
 
+    const initialTicketRank = { price: Number.MAX_VALUE } as TicketRank;
     return ticketRankList.reduce((minItem, currentItem) => {
       return currentItem.price < minItem.price ? currentItem : minItem;
-    });
+    }, initialTicketRank);
   }
 
   async getMiniEventWithTicketRanks(eventId: number): Promise<MiniEventWithTicketRank[]> {
-    const miniEvents = await this.miniEventRepository.find({ 
+    const miniEvents = await this.miniEventRepository.find({
       where: { eventId },
       order: { createdTime: 'ASC' }
-    }); 
+    });
 
     const miniEventListPromise = miniEvents.map(async (miniEvent) => {
       const ticketRanks = await this.ticketRankService.find({
