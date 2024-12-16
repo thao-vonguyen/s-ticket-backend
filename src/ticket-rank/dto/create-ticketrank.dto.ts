@@ -1,3 +1,4 @@
+// src/ticket-rank/dto/create-ticket-rank.dto.ts
 import { IsString, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 
 export class CreateTicketRankDto {
@@ -24,4 +25,5 @@ export class CreateTicketRankDto {
   @IsOptional()
   @IsNumber()
   soldNumber?: number; 
+  
 }

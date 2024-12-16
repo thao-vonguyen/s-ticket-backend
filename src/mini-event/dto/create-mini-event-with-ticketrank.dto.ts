@@ -40,5 +40,4 @@ export class CreateMiniEventWithTicketRankDto {
     @Type(() => CreateTicketRankDto) // Transform to CreateTicketRankDto
     ticketRanks: CreateTicketRankDto[];
 
-    // miniEventId will be set in the MiniEventService
 }
