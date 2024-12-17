@@ -1,6 +1,8 @@
-import { IsString, IsNotEmpty, IsDate, IsOptional, IsNumber, IsEnum, IsBoolean } from 'class-validator';
+import { IsString, IsNotEmpty, IsDate, IsOptional, IsNumber, IsEnum, IsBoolean, IsArray, ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
 import { EventService } from './../event.service';
 import { EventCategory, EventStatus } from './event.dto';
+import { CreateMiniEventWithTicketRankDto } from 'src/mini-event/dto/create-mini-event-with-ticketrank.dto';
 
 export class CreateEventDto {
   @IsString()
@@ -61,4 +63,9 @@ export class CreateEventDto {
   @IsBoolean()
   @IsNotEmpty()
   isOnAd: boolean;
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CreateMiniEventWithTicketRankDto) // Transform to CreateTicketRankDto
+  miniEvents: CreateMiniEventWithTicketRankDto[];
 }

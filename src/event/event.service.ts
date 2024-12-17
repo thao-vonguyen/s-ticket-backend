@@ -4,13 +4,17 @@ import { FindManyOptions, Repository } from 'typeorm';
 import { Event, EventWithDateAndPrice, EventWithMiniEventsAndTicketRanks } from './entities/event.entity';
 import { MiniEventService } from 'src/mini-event/mini-event.service';
 import { TicketRankService } from 'src/ticket-rank/ticket-rank.service';
-import { MiniEvent } from 'src/mini-event/entities/mini-event.entity';
+import { MiniEvent, MiniEventWithTicketRank } from 'src/mini-event/entities/mini-event.entity';
+import { CreateEventDto } from './dto/create-event.dto';
+import { TicketRank } from 'src/ticket-rank/entities/ticket-rank.entity';
 
 @Injectable()
 export class EventService {
   constructor(
     @InjectRepository(Event) private readonly eventRepository: Repository<Event>,
     @InjectRepository(MiniEvent) private readonly miniEventRepository: Repository<MiniEvent>,
+    @InjectRepository(MiniEventWithTicketRank) private readonly miniEventWithTicketRankRepository: Repository<MiniEventWithTicketRank>,
+    @InjectRepository(TicketRank) private readonly ticketRankRepository: Repository<TicketRank>,
     private readonly miniEventService: MiniEventService,
     private readonly ticketRankService: TicketRankService
   ) {}
@@ -70,4 +74,22 @@ export class EventService {
     
     return { ...event[0], miniEvents: miniEvents };
   }
+
+  async create(createEventDto: CreateEventDto): Promise<Event> {
+    // Create the main event
+    const event = this.eventRepository.create(createEventDto);
+    const savedEvent = await this.eventRepository.save(event);
+
+    // Create mini events and associate them with the saved event
+    if (createEventDto.miniEvents && createEventDto.miniEvents.length > 0) {
+      for (const miniEventDto of createEventDto.miniEvents) {
+        // Call the MiniEventService to create each mini event
+        await this.miniEventService.create(miniEventDto, savedEvent.id);
+      }
+    }
+
+    return savedEvent; // Return the saved event
+  }
+
 }
+

@@ -2,6 +2,8 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestj
 import { EventService } from './event.service';
 import { EventCategory } from './dto/event.dto';
 import { Filter, FindManyOptions } from 'typeorm';
+import { CreateEventDto } from './dto/create-event.dto';
+import { Event } from './entities/event.entity';
 
 @Controller('event')
 export class EventController {
@@ -31,5 +33,10 @@ export class EventController {
   @Get(':id')
   async getEvent(@Param('id') id: string) {
     return await this.eventService.getEventWithMiniEventsAndTicketRanks(+id);
+  }
+
+  @Post()
+  async create(@Body() createEventDto: CreateEventDto): Promise<Event> {
+    return this.eventService.create(createEventDto);
   }
 }

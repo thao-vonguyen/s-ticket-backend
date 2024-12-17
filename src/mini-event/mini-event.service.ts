@@ -61,17 +61,23 @@ export class MiniEventService {
     return await Promise.all(miniEventListPromise);
   }
 
-  async create(createMiniEventWithTicketRankDto: CreateMiniEventWithTicketRankDto): Promise<MiniEvent> {
+  async create(
+    createMiniEventWithTicketRankDto: CreateMiniEventWithTicketRankDto,
+    eventId: number,
+  ): Promise<MiniEvent> {
     // Create the mini event
-    const miniEvent = this.miniEventRepository.create(createMiniEventWithTicketRankDto);
+    const miniEvent = this.miniEventRepository.create({
+      ...createMiniEventWithTicketRankDto,
+      eventId, // Associate with the event
+    });
     const savedMiniEvent = await this.miniEventRepository.save(miniEvent);
     
     // Create ticket ranks and associate them with the mini event
     const ticketRanks = createMiniEventWithTicketRankDto.ticketRanks.map(rank => {
-        return {
-            ...rank,
-            miniEventId: savedMiniEvent.id, // Associate with the saved mini event
-        };
+      return {
+        ...rank,
+        miniEventId: savedMiniEvent.id, // Associate with the saved mini event
+      };
     });
 
     // Save all ticket ranks to the database
@@ -80,3 +86,4 @@ export class MiniEventService {
     return savedMiniEvent;
   }
 }
+

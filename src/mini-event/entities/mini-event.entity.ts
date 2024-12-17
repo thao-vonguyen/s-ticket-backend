@@ -26,6 +26,8 @@ export class MiniEvent {
 
     @Column({ name: 'image', type: 'text', nullable: true })
     image: string;
+
+    
 }
 
 export class MiniEventWithTicketRank extends MiniEvent {
