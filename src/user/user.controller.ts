@@ -1,4 +1,4 @@
-import { Controller, Param, Body, Post, Patch } from '@nestjs/common';
+import { Controller, Param, Body, Post, Patch, Get, Delete } from '@nestjs/common';
 import { UserService } from './user.service';
 import { ValidateEmailDto } from './dto/user.dto';
 import { User } from './entities/user.entity';
@@ -20,5 +20,15 @@ export class UserController {
   @Post()
   createUser(@Body() body: User) {
     return this.userService.createUser(body);
+  }
+
+  @Get()
+  getAllUsers() {
+    return this.userService.getAllUsers();
+  }
+
+  @Delete(':id')
+  deleteUser(@Param('id') id: string) {
+    return this.userService.deleteUser(id);
   }
 }

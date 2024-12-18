@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindManyOptions, Repository } from 'typeorm';
 import { Event, EventWithPrice, EventWithMiniEventsAndTicketRanks } from './entities/event.entity';
@@ -62,6 +62,19 @@ export class EventService {
       price: event.min_price
     }));
   }
+
+  async getAllEvents(): Promise<Event[]> {
+    return this.eventRepository.find();
+  }
+
+  async updateEvent(id: number, body: Partial<Event>) {
+    const event = await this.eventRepository.findOne({ where: { id } });
+    if (!event) {
+      throw new NotFoundException('Event not found');
+    }
+    return this.eventRepository.update(id, body);
+  }
+
 
   async getMyEvents(
     organizationId: number,

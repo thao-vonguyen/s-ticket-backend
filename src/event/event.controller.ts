@@ -10,6 +10,16 @@ import { EventStatus } from './dto/event.dto';
 export class EventController {
   constructor(private readonly eventService: EventService) {}
 
+  @Get('all')
+  getAllEvents() {
+    return this.eventService.getAllEvents();
+  }
+
+  @Patch(':id')
+  updateEvent(@Body() body: Partial<Event>, @Param('id') id: number) {
+    return this.eventService.updateEvent(id, body);
+  }
+
   @Get()
   async find(
     @Query('filter') filter: string
