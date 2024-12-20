@@ -1,6 +1,5 @@
 export enum TicketStatus {
-    SUCCESSFUL = 'SUCCESSFUL',
-    IN_PROGRESS = 'IN_PROGRESS',
+    UNUSED = 'UNUSED',
+    USED = 'USED',
     CANCELLED = 'CANCELLED',
-    PAYMENT_SUCCESS = 'PAYMENT_SUCCESS'
 } 
