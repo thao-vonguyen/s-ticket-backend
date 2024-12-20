@@ -25,5 +25,9 @@ export class Transaction {
     userId: number;
 
     @Column({ name: 'transaction_item', type: 'jsonb' })
-    transactionItem: object;
+    transactionItem: any[];
+
+    @Column({ name: 'event_id', type: 'int4' })
+    eventId: number;
+
 }

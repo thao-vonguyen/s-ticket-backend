@@ -13,6 +13,9 @@ import { TicketRank } from './ticket-rank/entities/ticket-rank.entity';
 import { TransactionModule } from './transaction/transaction.module';
 import { TicketModule } from './ticket/ticket.module';
 import { PaymentModule } from './payment/payment.module';
+import { Transaction } from './transaction/entities/transaction.entity';
+import { Payment } from './payment/entities/payment.entity';
+import { Ticket } from './ticket/entities/ticket.entity';
 
 @Module({
   imports: [
@@ -22,7 +25,7 @@ import { PaymentModule } from './payment/payment.module';
       port: 5432,
       password: 'VLYmuJ5UFWURmHcx',
       username: 'postgres.vepooluprzkesyzrzzjx',
-      entities: [Event, User, MiniEvent, TicketRank],
+      entities: [Event, User, MiniEvent, TicketRank, Transaction, Payment, Ticket],
       database: 'postgres',
       synchronize: false,
       logging: false,
@@ -38,4 +41,4 @@ import { PaymentModule } from './payment/payment.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

@@ -1,26 +1,48 @@
 import { Injectable } from '@nestjs/common';
-import { CreatePaymentDto } from './dto/create-payment.dto';
-import { UpdatePaymentDto } from './dto/update-payment.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Payment } from './entities/payment.entity';
+import { PaymentStatus } from './dto/payment.dto';
+import { BadRequestException } from '@nestjs/common';
 
 @Injectable()
 export class PaymentService {
-  create(createPaymentDto: CreatePaymentDto) {
-    return 'This action adds a new payment';
+  constructor(
+    @InjectRepository(Payment) private readonly paymentRepository: Repository<Payment>
+  ) { }
+
+  async updatePaymentStatus(paymentId: number, paymentStatus: string): Promise<Payment> {
+    const payment = await this.paymentRepository.findOne({ where: { id: paymentId } });
+    if (!payment) {
+      throw new BadRequestException('Payment not found');
+    }
+
+    if (!(paymentStatus in PaymentStatus)) {
+      throw new BadRequestException('Invalid payment status');
+    }
+
+    // Cập nhật trạng thái payment với giá trị enum
+    payment.status = PaymentStatus[paymentStatus as keyof typeof PaymentStatus];
+
+    return this.paymentRepository.save(payment);
   }
 
-  findAll() {
-    return `This action returns all payment`;
+  async findAll(): Promise<Payment[]> {
+    return this.paymentRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} payment`;
+  // Phương thức lấy một payment theo ID
+  async findOne(id: number): Promise<Payment> {
+    return this.paymentRepository.findOne({ where: { id } });
   }
 
-  update(id: number, updatePaymentDto: UpdatePaymentDto) {
-    return `This action updates a #${id} payment`;
+  // Phương thức xóa payment theo ID
+  async remove(id: number): Promise<void> {
+    const payment = await this.paymentRepository.findOne({ where: { id } });
+    if (!payment) {
+      throw new BadRequestException('Payment not found');
+    }
+    await this.paymentRepository.remove(payment);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} payment`;
-  }
 }

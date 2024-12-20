@@ -23,6 +23,6 @@ export class Ticket {
     userId: number;
 
     @Column({ name: 'transaction_id', type: 'int4' })
-    transaction_id: number;
+    transactionId: number;
 
 }
