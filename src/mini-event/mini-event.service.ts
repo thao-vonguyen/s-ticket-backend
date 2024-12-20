@@ -22,19 +22,19 @@ export class MiniEventService {
     return await this.miniEventRepository.find(filter);
   }
 
-  async findMinPriceTicketRank(eventId: number): Promise<TicketRank> {
+  async findMinPriceTicketRank(eventId: number): Promise<number> {
     const miniEvents = await this.miniEventRepository.find({
       where: { eventId }
     });
 
-    const ticketRankListPromise = miniEvents.map(async (miniEvent) => {
+    const minPricePromise = miniEvents.map(async (miniEvent) => {
       return await this.ticketRankService.findMinPriceTicketRank(miniEvent.id);
     })
 
-    const ticketRankList = await Promise.all(ticketRankListPromise);
+    const minPriceList = await Promise.all(minPricePromise);
 
-    return ticketRankList.reduce((minItem, currentItem) => {
-      return currentItem.price < minItem.price ? currentItem : minItem;
+    return minPriceList.reduce((minPrice, currentPrice) => {
+      return currentPrice < minPrice ? currentPrice : minPrice;
     });
   }
 

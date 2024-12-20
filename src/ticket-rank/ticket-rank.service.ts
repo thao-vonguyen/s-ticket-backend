@@ -9,11 +9,13 @@ export class TicketRankService {
         @InjectRepository(TicketRank) private readonly ticketRankRepository: Repository<TicketRank>
     ) {}
 
-    async findMinPriceTicketRank(miniEventId: number): Promise<TicketRank> {
-        return await this.ticketRankRepository.findOne({
-            where: { miniEventId },
-            order: { price: 'ASC' }
-        });
+    async findMinPriceTicketRank(miniEventId: number): Promise<number> {
+        const result = await this.ticketRankRepository
+            .createQueryBuilder('ticketRank')
+            .select('MIN(ticketRank.price)', 'minPrice')
+            .where('ticketRank.miniEventId = :miniEventId', { miniEventId })
+            .getRawOne();
+        return result.minPrice;
     }
 
     async find(filter: FindManyOptions<TicketRank>): Promise<TicketRank[]> {

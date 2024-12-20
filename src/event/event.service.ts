@@ -18,11 +18,11 @@ export class EventService {
 
     const promises = events.map(async(event) => {
 
-      let minPriceTicketRank = await this.miniEventService.findMinPriceTicketRank(event.id);
+      let minPrice = await this.miniEventService.findMinPriceTicketRank(event.id);
 
       return {
         ...event,
-        price: minPriceTicketRank.price
+        price: minPrice
       }
     });
 
