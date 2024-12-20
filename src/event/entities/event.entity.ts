@@ -57,13 +57,18 @@ export class Event {
 
   @Column({ name: 'is_on_ad', type: 'bool' })
   isOnAd: boolean;
+
+  @Column({ name: 'start_time', type: 'timestamp', nullable: true })
+  startTime: Date;
+
+  @Column({ name: 'end_time', type: 'timestamp', nullable: true })
+  endTime: Date;
 }
 
-export class EventWithDateAndPrice extends Event {
-  date: Date;
+export class EventWithPrice extends Event {
   price: number;
 }
 
-export class EventWithMiniEventsAndTicketRanks extends EventWithDateAndPrice {
+export class EventWithMiniEventsAndTicketRanks extends EventWithPrice {
   miniEvents: MiniEventWithTicketRank[];
 }
