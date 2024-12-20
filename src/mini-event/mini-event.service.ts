@@ -26,6 +26,12 @@ export class MiniEventService {
     return await this.miniEventRepository.find(filter);
   }
 
+  async findMyMiniEvents(eventId: number) {
+    return await this.miniEventRepository.find({
+      where: { eventId }
+    });
+  }
+
   async findMinPriceTicketRank(eventId: number): Promise<TicketRank> {
     const miniEvents = await this.miniEventRepository.find({
       where: { eventId }

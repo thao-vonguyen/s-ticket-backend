@@ -9,7 +9,7 @@ export class CreateEventDto {
   @IsNotEmpty()
   name: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   organizationId: number;
 
   @IsOptional()
@@ -63,6 +63,14 @@ export class CreateEventDto {
   @IsBoolean()
   @IsNotEmpty()
   isOnAd: boolean;
+
+  @IsOptional()
+  @IsDate()
+  startTime: Date;
+  
+  @IsOptional()
+  @IsDate()
+  endTime: Date;
 
   @IsArray()
   @ValidateNested({ each: true })

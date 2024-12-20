@@ -23,6 +23,12 @@ export class EventController {
     return await this.eventService.find(options);
   }
 
+  @Get('my-events/:id')
+  async getMyEvents(@Param('id') id: number) {
+    console.log(id)
+    return await this.eventService.getMyEvents(id);
+  }
+
   @Get('upcoming')
   async findUpcoming(
     @Query('limit') limit: number
