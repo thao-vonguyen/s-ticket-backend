@@ -36,7 +36,6 @@ export class TransactionService {
     await queryRunner.connect();
     await queryRunner.startTransaction();
 
-
     try {
       const payment = this.paymentRepository.create({
         paymentMethod: payment_method,
@@ -45,7 +44,6 @@ export class TransactionService {
       });
 
       const createdPayment = await this.paymentRepository.save(payment);
-
 
       const transaction = this.transactionRepository.create({
         userId: user_id,
@@ -70,6 +68,14 @@ export class TransactionService {
         }
       }
       await queryRunner.commitTransaction();
+
+      setTimeout(async () => {
+        console.log('Cancel transaction', createdTrans.id);
+        const trans = await this.transactionRepository.findOne({ where: { id: createdTrans.id } });
+        if (trans && trans.status === TransactionStatus.IN_PROGRESS) {
+          await this.updatePaymentStatus(createdTrans.id, PaymentStatus.USER_CANCELLED);
+        }
+      }, 1 * 60 * 1000);
       return createdTrans;
 
 
@@ -87,32 +93,25 @@ export class TransactionService {
     await queryRunner.startTransaction();
 
     try {
-
-      // Tìm Transaction tương ứng với Payment
       const transaction = await this.transactionRepository.findOne({ where: { id: transactionId } });
       if (!transaction) {
         throw new BadRequestException('Transaction not found');
       }
 
-      // Cập nhật trạng thái Payment (đầu tiên cập nhật trạng thái Payment)
       const updatedPayment = await this.paymentService.updatePaymentStatus(transaction.paymentId, paymentStatus);
       if (!updatedPayment) {
         throw new BadRequestException('Failed to update payment status');
       }
 
-
-
       if (paymentStatus === PaymentStatus.SUCCESSFUL) {
-        // Nếu thanh toán thành công, tạo vé và cập nhật trạng thái transaction
         const ticketsToSave = [];
         for (const rank of transaction.transactionItem) {
-
           for (let i = 0; i < rank.buy_amount; i++) {
             const ticket = this.ticketRepository.create({
               transactionId: transaction.id,
-              ticketRankId: rank.ticket_id,  // Sử dụng ticketRank đã lấy
+              ticketRankId: rank.ticket_id,
               userId: transaction.userId,
-              status: TicketStatus.UNUSED,  // Trạng thái vé là chưa sử dụng
+              status: TicketStatus.UNUSED,
             });
             ticketsToSave.push(ticket);
           }
@@ -120,10 +119,8 @@ export class TransactionService {
 
         await queryRunner.manager.save(ticketsToSave);
 
-        // Cập nhật trạng thái của transaction
         transaction.status = TransactionStatus.SUCCESSFUL;
       } else {
-        // Nếu thanh toán thất bại, cập nhật lại trạng thái và giảm số lượng vé đã bán
         for (const rank of transaction.transactionItem) {
           const ticketRank = await queryRunner.manager.findOne(TicketRank, { where: { id: rank.ticket_id }, lock: { mode: 'pessimistic_write' } });
 
@@ -135,10 +132,7 @@ export class TransactionService {
       }
 
       await queryRunner.manager.save(transaction);
-
-      // Commit transaction
       await queryRunner.commitTransaction();
-
       return transaction;
     } catch (error) {
       await queryRunner.rollbackTransaction();
@@ -155,7 +149,6 @@ export class TransactionService {
   findOne(id: number) {
     return `This action returns a #${id} transaction`;
   }
-
 
   remove(id: number) {
     return `This action removes a #${id} transaction`;

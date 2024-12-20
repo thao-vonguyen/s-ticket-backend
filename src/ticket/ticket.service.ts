@@ -8,9 +8,6 @@ import { MiniEvent } from 'src/mini-event/entities/mini-event.entity';
 
 @Injectable()
 export class TicketService {
-  // create(createTicketDto: CreateTicketDto) {
-  //   return 'This action adds a new ticket';
-  // }
   constructor(
     @InjectRepository(Ticket) private readonly ticketRepository: Repository<Ticket>,
     @InjectRepository(TicketRank) private ticketRankRepository: Repository<TicketRank>,
@@ -28,27 +25,19 @@ export class TicketService {
       },
     });
 
-
-    // Lấy danh sách ticketRankId duy nhất
     const uniqueTicketRankIds = [...new Set(tickets.map(ticket => ticket.ticketRankId))];
 
-    // Lấy thông tin ticketRank và event cho các ticketRankId đã chọn
     const ticketRanks = await Promise.all(uniqueTicketRankIds.map(ticketRank =>
       this.ticketRankRepository.findOne({ where: { id: ticketRank } })
     ));
 
-
     const uniqueMiniEventIds = [...new Set(ticketRanks.map(ticket => ticket.miniEventId))];
-
 
     const miniEvents = await Promise.all(uniqueMiniEventIds.map(miniEventId =>
       this.miniEventRepository.findOne({ where: { id: miniEventId } })
     ));
 
-    // Kết hợp thông tin ticket, ticketRank và event
-
     const uniqueEvent = [...new Set(miniEvents.map(ticket => ticket.eventId))];
-
 
     const events = await Promise.all(uniqueEvent.map(event =>
       this.eventRepository.findOne({ where: { id: event } })
@@ -67,8 +56,6 @@ export class TicketService {
       };
     });
 
-    console.log("ticketDetails", ticketDetails);
-
     return ticketDetails;
   }
 
@@ -80,13 +67,7 @@ export class TicketService {
     return `This action returns a #${id} ticket`;
   }
 
-  // update(id: number, updateTicketDto: UpdateTicketDto) {
-  //   return `This action updates a #${id} ticket`;
-  // }
-
   remove(id: number) {
     return `This action removes a #${id} ticket`;
   }
-
-
 }
