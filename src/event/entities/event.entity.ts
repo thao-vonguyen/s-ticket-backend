@@ -65,11 +65,10 @@ export class Event {
   endTime: Date;
 }
 
-export class EventWithDateAndPrice extends Event {
-  date: Date;
+export class EventWithPrice extends Event {
   price: number;
 }
 
-export class EventWithMiniEventsAndTicketRanks extends EventWithDateAndPrice {
+export class EventWithMiniEventsAndTicketRanks extends EventWithPrice {
   miniEvents: MiniEventWithTicketRank[];
 }

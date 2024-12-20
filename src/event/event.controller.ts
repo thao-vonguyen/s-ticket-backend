@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query, Post, Body } from '@nestjs/common';
 import { EventService } from './event.service';
 import { EventCategory } from './dto/event.dto';
-import { Filter, FindManyOptions } from 'typeorm';
+import { Filter, FindManyOptions, MoreThan } from 'typeorm';
 import { CreateEventDto } from './dto/create-event.dto';
 import { Event } from './entities/event.entity';
+import { EventStatus } from './dto/event.dto';
 
 @Controller('event')
 export class EventController {
@@ -33,7 +34,17 @@ export class EventController {
   async findUpcoming(
     @Query('limit') limit: number
   ) {
-    return await this.eventService.findUpcoming(limit);
+    let options: FindManyOptions = {
+      where: {
+        status: EventStatus.APPROVED,
+        startTime: MoreThan(new Date())
+      },
+      order: {
+        startTime: 'ASC'
+      },
+      take: limit
+    }
+    return await this.eventService.find(options);
   }
 
   @Get(':id')
