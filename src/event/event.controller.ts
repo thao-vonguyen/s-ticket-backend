@@ -1,7 +1,10 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query, Post, Body } from '@nestjs/common';
 import { EventService } from './event.service';
+import { EventCategory } from './dto/event.dto';
+import { Filter, FindManyOptions, MoreThan } from 'typeorm';
+import { CreateEventDto } from './dto/create-event.dto';
+import { Event } from './entities/event.entity';
 import { EventStatus } from './dto/event.dto';
-import { FindManyOptions, MoreThan } from 'typeorm';
 
 @Controller('event')
 export class EventController {
@@ -19,6 +22,12 @@ export class EventController {
       throw new Error('Invalid filter format. Expected JSON string.');
     }
     return await this.eventService.find(options);
+  }
+
+  @Get('my-events/:id')
+  async getMyEvents(@Param('id') id: number) {
+    console.log(id)
+    return await this.eventService.getMyEvents(id);
   }
 
   @Get('upcoming')
@@ -41,5 +50,10 @@ export class EventController {
   @Get(':id')
   async getEvent(@Param('id') id: string) {
     return await this.eventService.getEventWithMiniEventsAndTicketRanks(+id);
+  }
+
+  @Post()
+  async create(@Body() createEventDto: CreateEventDto): Promise<Event> {
+    return this.eventService.create(createEventDto);
   }
 }

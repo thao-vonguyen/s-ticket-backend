@@ -58,10 +58,10 @@ export class Event {
   @Column({ name: 'is_on_ad', type: 'bool' })
   isOnAd: boolean;
 
-  @Column({ name: 'start_time', type: 'timestamp', nullable: true })
+  @Column({ name: 'start_time', type: 'timestamp', nullable: true  })
   startTime: Date;
 
-  @Column({ name: 'end_time', type: 'timestamp', nullable: true })
+  @Column({ name: 'end_time', type: 'timestamp', nullable: true  })
   endTime: Date;
 }
 
