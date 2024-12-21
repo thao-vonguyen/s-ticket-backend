@@ -32,6 +32,9 @@ Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
 ## Contributor
 
 Võ Nguyễn Đoan Thảo
+
 Lê Phan Thủy Tiên
+
 Đỗ Hoàng Tiến
+
 Nguyễn Trịnh Ngọc Huân
