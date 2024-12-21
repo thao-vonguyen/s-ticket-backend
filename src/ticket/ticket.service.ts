@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindManyOptions, Repository } from 'typeorm';
 import { Ticket } from './entities/ticket.entity';
 import { TicketRank } from 'src/ticket-rank/entities/ticket-rank.entity';
 import { Event } from 'src/event/entities/event.entity';
 import { MiniEvent } from 'src/mini-event/entities/mini-event.entity';
+import { TicketStatus } from './dto/ticket.dto';
 
 @Injectable()
 export class TicketService {
@@ -15,13 +16,19 @@ export class TicketService {
     @InjectRepository(Event) private eventRepository: Repository<Event>,
   ) { }
 
-  async getTicketsByUserId(userId: number): Promise<Ticket[]> {
-    console.log("hheheh", userId);
+  async getTicketsByUserId(userId: number, status: TicketStatus): Promise<Ticket[]> {
+    const where: any = { userId };
+
+    // Nếu có status, thì thêm vào điều kiện lọc
+    if (status) {
+      where.status = status;
+    }
+
     const tickets = await this.ticketRepository.find({
-      where: { userId },
+      where,
       order: {
         ticketRankId: 'ASC',
-        status: 'ASC',
+        createdTime: 'DESC'
       },
     });
 
