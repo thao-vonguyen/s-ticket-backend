@@ -16,6 +16,7 @@ import { PaymentModule } from './payment/payment.module';
 import { Transaction } from './transaction/entities/transaction.entity';
 import { Payment } from './payment/entities/payment.entity';
 import { Ticket } from './ticket/entities/ticket.entity';
+import { PaypalModule } from './paypal/paypal.module';
 
 @Module({
   imports: [
@@ -36,7 +37,8 @@ import { Ticket } from './ticket/entities/ticket.entity';
     TicketRankModule,
     TransactionModule,
     TicketModule,
-    PaymentModule
+    PaymentModule,
+    PaypalModule
   ],
   controllers: [AppController],
   providers: [AppService],
