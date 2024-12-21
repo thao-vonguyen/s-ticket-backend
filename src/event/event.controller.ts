@@ -8,7 +8,7 @@ import { EventStatus } from './dto/event.dto';
 
 @Controller('event')
 export class EventController {
-  constructor(private readonly eventService: EventService) { }
+  constructor(private readonly eventService: EventService) {}
 
   @Get()
   async find(

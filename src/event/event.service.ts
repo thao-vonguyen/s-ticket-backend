@@ -21,7 +21,7 @@ export class EventService {
   ) { }
 
   async find(filter: FindManyOptions<Event>): Promise<EventWithPrice[]> {
-    const eventsWithPrice = await this.eventRepository
+    const queryBuilder = await this.eventRepository
       .createQueryBuilder('event')
       .leftJoinAndSelect('event.miniEvents', 'miniEvent')
       .leftJoin('miniEvent.ticketRanks', 'ticketRank')
@@ -31,7 +31,28 @@ export class EventService {
       ])
       .where(filter.where || {})
       .groupBy('event.id')
-      .getRawMany();
+      .limit(filter.take || 10)
+      // .getRawMany();
+
+    if (filter.order) {
+      const order: Record<string, 'ASC' | 'DESC'> = {};
+  
+      Object.keys(filter.order).forEach((field) => {
+        if (field === 'startTime') {
+          field = 'start_time';
+        } else if (field === 'createdTime') {
+          field = 'created_time';
+        }
+        order[field] = filter.order[field];
+      });
+  
+      // Sử dụng addOrderBy để xử lý nhiều trường hợp
+      Object.keys(order).forEach((field) => {
+        queryBuilder.addOrderBy(field, order[field]);
+      });
+    }
+
+    const eventsWithPrice = await queryBuilder.getRawMany();
 
     return eventsWithPrice.map(event => ({
       id: event.event_id,
