@@ -70,7 +70,6 @@ export class TransactionService {
       await queryRunner.commitTransaction();
 
       setTimeout(async () => {
-        console.log('Cancel transaction', createdTrans.id);
         const trans = await this.transactionRepository.findOne({ where: { id: createdTrans.id } });
         if (trans && trans.status === TransactionStatus.IN_PROGRESS) {
           await this.updatePaymentStatus(createdTrans.id, PaymentStatus.USER_CANCELLED);
