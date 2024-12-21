@@ -1,6 +1,6 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { EventCategory, EventStatus } from '../dto/event.dto';
-import { MiniEventWithTicketRank } from 'src/mini-event/entities/mini-event.entity';
+import { MiniEvent, MiniEventWithTicketRank } from 'src/mini-event/entities/mini-event.entity';
 
 @Entity('event')
 export class Event {
@@ -63,12 +63,19 @@ export class Event {
 
   @Column({ name: 'end_time', type: 'timestamp', nullable: true })
   endTime: Date;
+
+  @OneToMany(() => MiniEvent, (miniEvent) => miniEvent.event)
+  miniEvents: MiniEvent[];
 }
 
-export class EventWithPrice extends Event {
+export class EventWithPrice {
+  id: number;
+  name: string;
+  startTime: Date;
+  image: string;
   price: number;
 }
 
-export class EventWithMiniEventsAndTicketRanks extends EventWithPrice {
-  miniEvents: MiniEventWithTicketRank[];
+export class EventWithMiniEventsAndTicketRanks extends Event {
+  price: number;
 }

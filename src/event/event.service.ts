@@ -21,19 +21,25 @@ export class EventService {
   ) { }
 
   async find(filter: FindManyOptions<Event>): Promise<EventWithPrice[]> {
-    const events = await this.eventRepository.find(filter);
+    const eventsWithPrice = await this.eventRepository
+      .createQueryBuilder('event')
+      .leftJoinAndSelect('event.miniEvents', 'miniEvent')
+      .leftJoin('miniEvent.ticketRanks', 'ticketRank')
+      .select([
+        'event.*',
+        'MIN(ticketRank.price) AS min_price'
+      ])
+      .where(filter.where || {})
+      .groupBy('event.id')
+      .getRawMany();
 
-    const promises = events.map(async (event) => {
-
-      let minPrice = await this.miniEventService.findMinPriceTicketRank(event.id);
-
-      return {
-        ...event,
-        price: minPrice
-      }
-    });
-
-    return Promise.all(promises);
+    return eventsWithPrice.map(event => ({
+      id: event.event_id,
+      name: event.event_name,
+      startTime: event.start_time,
+      image: event.image,
+      price: event.min_price
+    }));
   }
 
   async getMyEvents(
@@ -58,11 +64,25 @@ export class EventService {
   }
 
   async getEventWithMiniEventsAndTicketRanks(id: number): Promise<EventWithMiniEventsAndTicketRanks> {
-    const event = await this.find({ where: { id } });
+    const event = await this.eventRepository.findOne({
+      where: { id: id },
+      relations: ['miniEvents', 'miniEvents.ticketRanks'],
+    });
 
-    const miniEvents = await this.miniEventService.getMiniEventWithTicketRanks(id);
+    if (event) {
+      let minPrice = Infinity; 
+      event.miniEvents.forEach((miniEvent) => {
+        miniEvent.ticketRanks.forEach((ticketRank) => {
+          // Cập nhật giá trị minPrice nếu tìm thấy giá trị nhỏ hơn
+          if (ticketRank.price < minPrice) {
+            minPrice = ticketRank.price;
+          }
+        });
+      });
 
-    return { ...event[0], miniEvents: miniEvents };
+      return { ...event, price: minPrice };
+    }
+    return null;    
   }
 
   async create(createEventDto: CreateEventDto): Promise<Event> {

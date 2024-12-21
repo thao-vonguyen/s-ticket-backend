@@ -1,5 +1,5 @@
 import { MiniEvent } from "src/mini-event/entities/mini-event.entity";
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity('ticket_rank')
 export class TicketRank {
@@ -29,4 +29,8 @@ export class TicketRank {
 
     @Column({ name: 'sold_number', type: 'int2' })
     soldNumber: number;
+
+    @ManyToOne(() => MiniEvent, (event) => event.ticketRanks)
+    @JoinColumn({ name: 'mini_event_id' })
+    miniEvent: MiniEvent;
 }
