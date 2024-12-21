@@ -24,10 +24,10 @@ export class PaypalService {
             logging: {
                 logLevel: LogLevel.Info,
                 logRequest: {
-                    logBody: true,
+                    logBody: false,
                 },
                 logResponse: {
-                    logHeaders: true,
+                    logHeaders: false,
                 },
             },
         });
