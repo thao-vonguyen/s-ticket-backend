@@ -21,6 +21,17 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
+## Reference
+
+For frontend repository of this project, reach this link: [link](https://github.com/thtienn/s-ticket-frontend).
+
 ## License
 
 Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+
+## Contributor
+
+Võ Nguyễn Đoan Thảo
+Lê Phan Thủy Tiên
+Đỗ Hoàng Tiến
+Nguyễn Trịnh Ngọc Huân
